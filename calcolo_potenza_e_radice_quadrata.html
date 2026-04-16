@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Benchmark Potenze e Radici</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    #risultato {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Benchmark potenze e radici quadrate</h1>
+
+  <label for="numero">Inserisci un numero (>= 1):</label>
+  <input 
+    id="numero" 
+    type="number" 
+    min="1" 
+    step="1" 
+    required
+  >
+
+  <button id="calcolaBtn">Calcola</button>
+
+  <h2 id="risultato" aria-live="polite"></h2>
+
+  <script>
+    const input = document.getElementById("numero");
+    const bottone = document.getElementById("calcolaBtn");
+    const output = document.getElementById("risultato");
+
+    function benchmark() {
+      const valore = Number(input.value);
+
+      if (!Number.isInteger(valore) || valore < 1) {
+        output.textContent = "Inserisci un numero intero valido >= 1";
+        return;
+      }
+
+      let risultatoPow = 0;
+      let risultatoSqrt = 0;
+
+      // Math.pow()
+      const startPow = performance.now();
+      for (let i = 1; i <= valore; i++) {
+        risultatoPow += Math.pow(10, i);
+      }
+      const tempoPow = performance.now() - startPow;
+
+      // Math.sqrt()
+      const startSqrt = performance.now();
+      for (let i = 1; i <= valore; i++) {
+        risultatoSqrt += Math.sqrt(i);
+      }
+      const tempoSqrt = performance.now() - startSqrt;
+
+      // SOMMA tempi
+      const totale = (tempoPow + tempoSqrt).toFixed(2);
+
+      // Output unificato
+      output.textContent = `${totale} ms totali per ${valore} potenze del 10 e radici quadrate`;
+    }
+
+    bottone.addEventListener("click", benchmark);
+
+    input.addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        benchmark();
+      }
+    });
+  </script>
+
+</body>
+</html>
